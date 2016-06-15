@@ -143,11 +143,6 @@ jwt_add_exp(ClaimSetMap, ExpirationSeconds) ->
                  end,
     maps:put(exp, Expiration, ClaimSetMap).
 
-
-jwt_check_signature(EncSignature, <<"RS256">>, Payload, #'RSAPublicKey'{} =
-                    PublicKey) ->
-    Signature = base64url:decode(EncSignature),
-    public_key:verify(Payload, sha256, Signature, PublicKey);
 jwt_check_signature(EncSignature, <<"RS256">>, Payload, PublicKey)
   when is_list(PublicKey) ->
     Signature = base64url:decode(EncSignature),
@@ -157,8 +152,6 @@ jwt_check_signature(Signature, <<"HS256">>, Payload, SharedKey) ->
 
 jwt_sign(rs256, Payload, Key) when is_list(Key)->
     base64url:encode(crypto:sign(rsa, sha256, Payload, Key));
-jwt_sign(rs256, Payload, #'RSAPrivateKey'{} = Key) ->
-    base64url:encode(public_key:sign(Payload, sha256, Key));
 jwt_sign(hs256, Payload, Key) ->
     base64url:encode(crypto:hmac(sha256, Key, Payload));
 jwt_sign(_, _, _) ->

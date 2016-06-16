@@ -9,7 +9,9 @@
                   stdlib,
                   crypto,
                   jsx,
-                  base64url
+                  base64url,
+                  public_key,
+                  ssl
                  ]},
   {modules, []},
   {env, []}
